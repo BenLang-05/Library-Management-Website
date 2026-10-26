@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+            <title>Rendering Daily Weather Information</title>
+            <link rel="icon" type="image/x-icon" href="logo.png">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <link rel ="stylesheet" type ="text/css" href="tabsCSS.css">
+    </head>
+    
+
+    <script src="dailyweatherdata.js"></script>
+    <script src="weatherforecast.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"
+      integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js">
+    </script>
+
+    <style>
+      canvas {
+        width: 95% !important;
+        height: auto !important;
+        
+      }
+
+    </style>
+    <div class="scroll">
+      <div class="progress">
+          <div class="bar" id="myBar"></div>
+      </div>
+  </div>
+
+    <body style="  background-color: #25d3bc;">
+      <img src="logo.png" alt="logo" class="center2">
+
+    <div id="nav">
+    <ul>
+      <li><a href = "CV.html">CURRICULUM VITAE</a></li>
+      <div class="subnav">
+          <button class="subButton">WEATHER<i class=" fa fa-caret-down"></i></button>
+              <div class="subnav-content">
+                  <li><a href="Weather.html">TEMPERATURE</a></li>
+                  <li><a href = "humidity.html">HUMIDITY</a></li>
+              </div>
+      </div>
+      <li><a href = "viewRecords.php"> VIEW RECORDS</a></li>
+      <li style="float:right;"><a href = "homePage.html">CLOSE</a></li>
+      <li style="float: right;"><a href = "session.php">LOG IN</a></li>
+    </ul>
+    </div>
+
+    <div id="style">
+    <h2>Stoke-on-Trent</h2> 
+    <h4>Longitude: <label id="lon"></label><br>
+    Latitude: <label id="lat"></label><br></h4>
+      <h2>Temperature:</h2>
+      <canvas id="myChart" ></canvas><br>
+      <div id="button">
+        <button type="button" id='Bar' >Bar</button>
+        <button type="button" id='Line'>Line</button><br><br>
+      </div>
+    
+    
+       
+   
+    
+    <script>
+      //TODO: Task 1:
+
+    
+
+    
+
+      var daily = JSON.parse(dailydata_stoke);
+      document.getElementById('lon').innerHTML = daily.coord.lon;
+      document.getElementById('lat').innerHTML = daily.coord.lat;
+     
+      //TODO: Task 2, 3 and 4
+      var forecast = JSON.parse(forecast_stoke);
+      this.dateList = forecast.list.map(list => {
+        return list.dt_txt;
+      });
+    
+      this.temperatureList = forecast.list.map(list => {
+        return list.main.temp;
+      });
+
+      var tempdata = {
+          labels: this.dateList,
+          datasets: [
+            {
+              label: "Temperature", 
+              backgroundColor: "#2645a7",
+              borderColor: "black",
+              fill: false,
+              data: this.temperatureList
+            }
+          ]
+        }
+        
+   
+      var ctx = document.getElementById("myChart").getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: tempdata,
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }});
+
+
+      document.getElementById('Bar').onclick = 
+      function(){
+        myChart.destroy();
+        myChart = new Chart(ctx, {
+            type:'bar',
+            data: tempdata
+        });
+        };
+        document.getElementById('Line').onclick =function(){
+            myChart.destroy();
+            myChart = new Chart(ctx,{
+                type:'line',
+                data: tempdata
+            });
+        };
+       
+    
+    </script>
+</div>
+</html>
